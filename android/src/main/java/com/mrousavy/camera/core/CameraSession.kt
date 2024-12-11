@@ -61,10 +61,16 @@ import com.mrousavy.camera.core.types.VideoStabilizationMode
 import com.mrousavy.camera.core.utils.FileUtils
 import com.mrousavy.camera.core.utils.runOnUiThread
 import com.mrousavy.camera.frameprocessors.Frame
+import android.hardware.camera2.CaptureRequest
+import androidx.camera.camera2.interop.Camera2CameraControl
+import androidx.camera.camera2.interop.Camera2Interop
+import androidx.camera.camera2.interop.CaptureRequestOptions
+import android.hardware.camera2.params.RggbChannelVector
 import java.io.Closeable
 import kotlin.math.roundToInt
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+
 
 class CameraSession(private val context: Context, private val callback: Callback) :
   Closeable,
@@ -491,7 +497,7 @@ class CameraSession(private val context: Context, private val callback: Callback
       lifecycleRegistry.currentState = Lifecycle.State.CREATED
     }
   }
-  
+
   suspend fun setAWBMode(mode: Int) {
     camera?.let {
         val camera2CameraControl = Camera2CameraControl.from(it.cameraControl)
