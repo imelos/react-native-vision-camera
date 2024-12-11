@@ -491,6 +491,51 @@ class CameraSession(private val context: Context, private val callback: Callback
       lifecycleRegistry.currentState = Lifecycle.State.CREATED
     }
   }
+  
+  suspend fun setAWBMode(mode: Int) {
+    camera?.let {
+        val camera2CameraControl = Camera2CameraControl.from(it.cameraControl)
+
+        val captureRequestOptions = CaptureRequestOptions.Builder()
+            .setCaptureRequestOption(
+                CaptureRequest.CONTROL_AWB_MODE,
+                when (mode) {
+                    -1 -> CaptureRequest.CONTROL_AWB_MODE_OFF
+                    0 -> CaptureRequest.CONTROL_AWB_MODE_AUTO
+                    1 -> CaptureRequest.CONTROL_AWB_MODE_INCANDESCENT
+                    2 -> CaptureRequest.CONTROL_AWB_MODE_FLUORESCENT
+                    3 -> CaptureRequest.CONTROL_AWB_MODE_DAYLIGHT
+                    4 -> CaptureRequest.CONTROL_AWB_MODE_CLOUDY_DAYLIGHT
+                    5 -> CaptureRequest.CONTROL_AWB_MODE_SHADE
+                    6 -> CaptureRequest.CONTROL_AWB_MODE_WARM_FLUORESCENT
+                    else -> {
+                        // Handle invalid mode, e.g., log an error or set a default
+                        CaptureRequest.CONTROL_AWB_MODE_AUTO
+                    }
+                }
+            )
+            .build()
+
+        camera2CameraControl.captureRequestOptions = captureRequestOptions
+    }
+  }
+
+  suspend fun setRGBMatrix(r: Float,g:Float,b: Float) {
+    camera?.let {
+        val camera2CameraControl = Camera2CameraControl.from(it.cameraControl)
+        val captureRequestOptions = CaptureRequestOptions.Builder()
+            .setCaptureRequestOption(
+                CaptureRequest.CONTROL_AWB_MODE,
+                CaptureRequest.CONTROL_AWB_MODE_OFF
+            ).
+            setCaptureRequestOption(CaptureRequest.COLOR_CORRECTION_MODE, CaptureRequest.COLOR_CORRECTION_MODE_TRANSFORM_MATRIX)
+            .
+            setCaptureRequestOption(CaptureRequest.COLOR_CORRECTION_GAINS, RggbChannelVector(r, g, g, b))
+            .build()
+
+        camera2CameraControl.captureRequestOptions = captureRequestOptions
+    }
+  }
 
   suspend fun takePhoto(flash: Flash, enableShutterSound: Boolean, outputOrientation: Orientation): Photo {
     val camera = camera ?: throw CameraNotReadyError()
