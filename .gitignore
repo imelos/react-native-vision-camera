@@ -78,6 +78,4 @@ example/ios/vendor
 
 # when switching from v2 -> v3 branches
 /example
-/ios
-/android
 /lib
