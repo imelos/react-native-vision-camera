@@ -39,7 +39,15 @@ extension CameraSession {
       VisionLogger.log(level: .info, message: "Capturing photo...")
 
       // Create photo settings
-      let photoSettings = AVCapturePhotoSettings()
+      var photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
+      if photoOutput.availablePhotoCodecTypes.contains(.hevc) {
+          if let useHEIC = options["useHEIC"] as? Bool {
+            print("AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc]")
+            photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
+          }
+      } else {
+        print("AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])")
+      }
 
       // set photo resolution
       if #available(iOS 16.0, *) {

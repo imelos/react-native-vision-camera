@@ -80,6 +80,12 @@ final class CameraViewManager: RCTViewManager {
   }
 
   @objc
+  final func getAvailablePhotoCodecs(_ node: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    let component = getCameraView(withTag: node)
+    component.getAvailablePhotoCodecs(promise: Promise(resolver: resolve, rejecter: reject))
+  }
+
+  @objc
   final func takeSnapshot(_ node: NSNumber, options: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     let component = getCameraView(withTag: node)
     component.takeSnapshot(options: options, promise: Promise(resolver: resolve, rejecter: reject))

@@ -129,6 +129,30 @@ export class Camera extends React.PureComponent<CameraProps, CameraState> {
     }
   }
 
+  public async getAvailablePhotoCodecs(): Promise<string[]> {
+    try {
+      return await CameraModule.getAvailablePhotoCodecs(this.handle)
+    } catch (e) {
+      throw tryParseNativeCameraError(e)
+    }
+  }
+
+  public async setAWBMode(mode?: number): Promise<PhotoFile> {
+    try {
+      return await CameraModule.setAWBMode(this.handle, mode ?? {})
+    } catch (e) {
+      throw tryParseNativeCameraError(e)
+    }
+  }
+
+  public async setRGBMatrix(options: {r: number; g: number; b: number}): Promise<PhotoFile> {
+    try {
+      return await CameraModule.setRGBMatrix(this.handle, options ?? {})
+    } catch (e) {
+      throw tryParseNativeCameraError(e)
+    }
+  }
+
   /**
    * Captures a snapshot of the Camera view and write it's content to a temporary file.
    *

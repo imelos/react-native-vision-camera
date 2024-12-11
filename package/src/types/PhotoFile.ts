@@ -29,6 +29,7 @@ export interface TakePhotoOptions {
    * @default true
    */
   enableShutterSound?: boolean
+  useHEIC?: boolean
 }
 
 /**

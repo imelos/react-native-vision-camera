@@ -46,9 +46,27 @@ class PhotoCaptureDelegate: GlobalReferenceHolder, AVCapturePhotoCaptureDelegate
       promise.reject(error: .capture(.unknown(message: error.description)), cause: error)
       return
     }
+    var fileExtension: String = "";
+    guard let imageData = photo.fileDataRepresentation() else {
+            print("Failed to get image data representation")
+            return
+        }
+        // Verify the image format if necessary
+        if let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil),
+           let uti = CGImageSourceGetType(imageSource) {
+           let utiString = uti as String
+          print("Captured image format------------: \(utiString)")
+          if utiString == "public.heic" {
+              fileExtension = "heic"
+              print("SELECTED FORMAT------------: \("heic")")
+          } else {
+              fileExtension = "jpeg" 
+              print("SELECTED FORMAT------------: \("jpeg")")
+          }
+        }
 
     do {
-      let path = try FileUtils.writePhotoToTempFile(photo: photo, metadataProvider: metadataProvider)
+      let path = try FileUtils.writePhotoToTempFile(photo: photo, metadataProvider: metadataProvider, fileExtension:fileExtension)
 
       let exif = photo.metadata["{Exif}"] as? [String: Any]
       let width = exif?["PixelXDimension"]

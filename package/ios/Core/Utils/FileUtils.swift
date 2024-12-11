@@ -15,7 +15,7 @@ enum FileUtils {
   /**
    Writes Data to a temporary file and returns the file path.
    */
-  private static func writeDataToTempFile(data: Data, fileExtension: String = "jpeg") throws -> URL {
+  private static func writeDataToTempFile(data: Data, fileExtension: String) throws -> URL {
     let filename = UUID().uuidString + "." + fileExtension
     let tempFilePath = FileManager.default.temporaryDirectory
       .appendingPathComponent(filename)
@@ -27,19 +27,19 @@ enum FileUtils {
     return tempFilePath
   }
 
-  static func writePhotoToTempFile(photo: AVCapturePhoto, metadataProvider: MetadataProvider) throws -> URL {
+  static func writePhotoToTempFile(photo: AVCapturePhoto, metadataProvider: MetadataProvider, fileExtension: String = "jpeg") throws -> URL {
     guard let data = photo.fileDataRepresentation(with: metadataProvider) else {
       throw CameraError.capture(.imageDataAccessError)
     }
-    let path = try writeDataToTempFile(data: data)
+      let path = try writeDataToTempFile(data: data, fileExtension:fileExtension)
     return path
   }
 
-  static func writeUIImageToTempFile(image: UIImage, compressionQuality: CGFloat = 1.0) throws -> URL {
+  static func writeUIImageToTempFile(image: UIImage, compressionQuality: CGFloat = 1.0, fileExtension: String = "jpeg") throws -> URL {
     guard let data = image.jpegData(compressionQuality: compressionQuality) else {
       throw CameraError.capture(.imageDataAccessError)
     }
-    let path = try writeDataToTempFile(data: data)
+    let path = try writeDataToTempFile(data: data, fileExtension: fileExtension)
     return path
   }
 }

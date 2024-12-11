@@ -208,6 +208,28 @@ class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBase
     return status.unionValue
   }
 
+  @ReactMethod
+  fun setAWBMode(viewTag: Int, mode: Int, promise: Promise) {
+    backgroundCoroutineScope.launch {
+      val view = findCameraView(viewTag)
+      withPromise(promise) {
+        view.setAWBMode(mode)
+        return@withPromise null
+      }
+    }
+  }
+
+  @ReactMethod
+  fun setRGBMatrix(viewTag: Int, options: ReadableMap, promise: Promise) {
+    backgroundCoroutineScope.launch {
+      val view = findCameraView(viewTag)
+      withPromise(promise) {
+        view.setRGBMatrix(options)
+        return@withPromise null
+      }
+    }
+  }
+
   @ReactMethod(isBlockingSynchronousMethod = true)
   fun getMicrophonePermissionStatus(): String {
     val status = getPermission(Manifest.permission.RECORD_AUDIO)

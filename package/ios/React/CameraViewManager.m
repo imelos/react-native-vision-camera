@@ -87,6 +87,10 @@ RCT_EXTERN_METHOD(takePhoto
                   : (NSDictionary*)options resolve
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject);
+RCT_EXTERN_METHOD(getAvailablePhotoCodecs
+                  : (nonnull NSNumber*)node resolve
+                  : (RCTPromiseResolveBlock)resolve reject
+                  : (RCTPromiseRejectBlock)reject);
 RCT_EXTERN_METHOD(takeSnapshot
                   : (nonnull NSNumber*)node options
                   : (NSDictionary*)options resolve
